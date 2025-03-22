@@ -127,15 +127,15 @@ impl Display for CrackedError {
             Self::AudioStream(err) => f.write_str(&format!("{err}")),
             Self::AudioStreamRustyYtdlMetadata => {
                 f.write_str(FAIL_AUDIO_STREAM_RUSTY_YTDL_METADATA)
-            },
+            }
             Self::AuxMetadataError(err) => f.write_str(&format!("{err}")),
             Self::AuthorDisconnected(mention) => {
                 f.write_fmt(format_args!("{FAIL_AUTHOR_DISCONNECTED} {mention}"))
-            },
+            }
             Self::AuthorNotFound => f.write_str(FAIL_AUTHOR_NOT_FOUND),
             Self::AlreadyConnected(mention) => {
                 f.write_fmt(format_args!("{FAIL_AUTHOR_NOT_FOUND} {mention}"))
-            },
+            }
             Self::Anyhow(err) => f.write_str(&format!("{err}")),
             #[cfg(feature = "crack-gpt")]
             Self::CrackGPT(err) => f.write_str(&format!("{err}")),
@@ -144,11 +144,11 @@ impl Display for CrackedError {
             )),
             Self::CommandNotFound(command) => {
                 f.write_fmt(format_args!("Command does not exist: {command}"))
-            },
+            }
             Self::Control(err) => f.write_str(&format!("{err}")),
             Self::DurationParseError(d, u) => {
                 f.write_str(&format!("Failed to parse duration `{d}` and `{u}`",))
-            },
+            }
             Self::EmptySearchResult => f.write_str(EMPTY_SEARCH_RESULT),
             Self::EmptyVector(msg) => f.write_str(&format!("{FAIL_EMPTY_VECTOR} {msg}")),
             Self::FailedResume => f.write_str(FAIL_RESUME),
@@ -161,7 +161,7 @@ impl Display for CrackedError {
             Self::IO(err) => f.write_str(&format!("{err}")),
             Self::IndexOutOfBounds { name, index } => {
                 f.write_str(&format!("Index out of bounds for `{name}` at {index}"))
-            },
+            }
             Self::InvalidIP(ip) => f.write_str(&format!("Invalid ip {ip}")),
             Self::InvalidTopGGToken => f.write_str(FAIL_INVALID_TOPGG_TOKEN),
             Self::InvalidPermissions => f.write_str(FAIL_INVALID_PERMS),
@@ -176,19 +176,19 @@ impl Display for CrackedError {
                     .map(|p| p.to_string())
                     .unwrap_or(COULD_NOT_FIND_PERMS.to_string());
                 f.write_str(&format!("{FAIL_MISSING_USER_PERMISSIONS}: {perm_str}"))
-            },
+            }
             Self::MissingBotPermissions(perm) => {
                 let perm_str = perm
                     .map(|p| p.to_string())
                     .unwrap_or(COULD_NOT_FIND_PERMS.to_string());
                 f.write_str(&format!("{FAIL_MISSING_BOT_PERMISSIONS}: {perm_str}"))
-            },
+            }
             Self::NotInRange(param, value, lower, upper) => f.write_str(&format!(
                 "`{param}` should be between {lower} and {upper} but was {value}"
             )),
             Self::NotInMusicChannel(channel_id) => {
                 f.write_str(&format!("{NOT_IN_MUSIC_CHANNEL} {}", channel_id.mention()))
-            },
+            }
             Self::NoChannelId => f.write_str(NO_CHANNEL_ID),
             Self::NotConnected => f.write_str(FAIL_NO_VOICE_CONNECTION),
             Self::NotImplemented => f.write_str(FAIL_NOT_IMPLEMENTED),
@@ -199,7 +199,7 @@ impl Display for CrackedError {
             Self::NoGuildId => f.write_str(NO_GUILD_ID),
             Self::NoGuildForChannelId(channel_id) => {
                 f.write_fmt(format_args!("No guild for channel id {channel_id}",))
-            },
+            }
             Self::NoGuildSettings => f.write_str(NO_GUILD_SETTINGS),
             Self::NoLogChannel => f.write_str("No log channel"),
             Self::NoMetadata => f.write_str(NO_METADATA),
@@ -248,11 +248,11 @@ impl PartialEq for CrackedError {
             (Self::Other(l0), Self::Other(r0)) => l0 == r0,
             (Self::NotInRange(l0, l1, l2, l3), Self::NotInRange(r0, r1, r2, r3)) => {
                 l0 == r0 && l1 == r1 && l2 == r2 && l3 == r3
-            },
+            }
             (Self::AuthorDisconnected(l0), Self::AuthorDisconnected(r0))
             | (Self::AlreadyConnected(l0), Self::AlreadyConnected(r0)) => {
                 l0.to_string() == r0.to_string()
-            },
+            }
             (Self::Serenity(l0), Self::Serenity(r0)) => format!("{l0:?}") == format!("{r0:?}"),
             _ => core::mem::discriminant(self) == core::mem::discriminant(other),
         }
@@ -404,7 +404,6 @@ impl From<AuxMetadataError> for CrackedError {
         CrackedError::AuxMetadataError(err)
     }
 }
-
 
 /// Types that implement this trait can be tested as true or false and also provide
 /// a way of unpacking themselves.

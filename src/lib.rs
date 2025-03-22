@@ -71,8 +71,6 @@ pub(crate) static DEFAULT_VALID_TOKEN: &str =
 pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<&'static str> =
     LazyLock::new(|| DEFAULT_VALID_TOKEN);
 
-
-
 /// Custom error type for track resolve errors.
 #[derive(ThisError, Debug)]
 pub enum TrackResolveError {
@@ -331,7 +329,7 @@ impl Display for QueryType {
                         .source_url
                         .unwrap_or_default()
                 )
-            },
+            }
             QueryType::YoutubeSearch(query) => write!(f, "{query}"),
             QueryType::None => write!(f, "None"),
         }
@@ -452,7 +450,7 @@ pub fn get_human_readable_timestamp(duration: Option<Duration>) -> String {
             } else {
                 format!("{hours:02}:{minutes:02}:{seconds:02}")
             }
-        },
+        }
         None => "∞".to_string(),
     }
 }
@@ -467,7 +465,7 @@ pub fn to_fixed<T: ValidLength>(s: impl Into<String>) -> FixedString<T> {
             #[cfg(feature = "crack-tracing")]
             error!("{}", e);
             panic!("{}", e);
-        },
+        }
     }
 }
 

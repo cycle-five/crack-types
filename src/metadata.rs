@@ -122,14 +122,14 @@ impl From<&SearchResult> for NewAuxMetadata {
                 metadata.source_url = Some(video.url);
                 metadata.title = Some(video.title);
                 metadata.thumbnail = video.thumbnails.first().map(|x| x.url.clone());
-            },
+            }
             SearchResult::Playlist(playlist) => {
                 metadata.title = Some(playlist.name);
                 metadata.source_url = Some(playlist.url);
                 metadata.duration = None;
                 metadata.thumbnail = playlist.thumbnails.first().map(|x| x.url.clone());
-            },
-            SearchResult::Channel(_) => {},
+            }
+            SearchResult::Channel(_) => {}
         }
         NewAuxMetadata(metadata)
     }
