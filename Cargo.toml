@@ -46,10 +46,6 @@ tracing-subscriber = { version = "0.3", features = [
 ], optional = true }
 tokio = { version = "1.44.1", features = ["macros", "rt-multi-thread"] }
 
-[dependencies.poise]
-git = "https://github.com/serenity-rs/poise.git"
-branch = "next"
-
 [dependencies.rspotify]
 version = "0.14"
 default-features = false
@@ -61,28 +57,18 @@ default-features = false
 features = ["live", "rustls-tls", "search", "blocking", "ffmpeg"]
 
 [dependencies.serenity]
-version = "0.12.4"
-default-features = false
-features = [
-  "default",
-  "builder",
-  "cache",
-  "collector",
-  "framework",
-  "gateway",
-  "http",
-  "model",
-  "voice",
-  "voice_model",
-  "utils",
-  "tokio_task_builder",
-  "interactions_endpoint",
-  "chrono",
-  "rustls_backend"
-]
+git = "https://github.com/serenity-rs/serenity.git"
+branch = "next"
+# version = "0.12.4"
+
+[dependencies.poise]
+git = "https://github.com/serenity-rs/poise.git"
+branch = "serenity-next"
 
 [dependencies.songbird]
-version = "0.5.0"
+# version = "0.5.0"
+git = "https://github.com/serenity-rs/songbird.git"
+branch = "serenity-next"
 features = [
   "driver", "gateway", "serenity", "rustls", "receive"
 ]

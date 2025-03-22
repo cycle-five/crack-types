@@ -22,7 +22,7 @@ use rspotify::model::TrackId;
 // ------------------------------------------------------------------
 // Non-public imports
 // ------------------------------------------------------------------
-// use serenity::all::Token;
+use serenity::all::Token;
 use serenity::model::id::{ChannelId, GuildId};
 use small_fixed_array::{FixedString, ValidLength};
 use songbird::Call;
@@ -66,10 +66,8 @@ pub const MUSIC_SEARCH_SUFFIX: &str = r#"\"topic\""#;
 pub(crate) static DEFAULT_VALID_TOKEN: &str =
     "XXXXXXXXXXXXXXXXXXXXXXXX.X_XXXX.XXXXXXXXXXXXXXXXXXXXXX_XXXX";
 
-//pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<Token> =
-//    LazyLock::new(|| Token::from_str(DEFAULT_VALID_TOKEN).expect("Invalid token"));
-pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<&'static str> =
-    LazyLock::new(|| DEFAULT_VALID_TOKEN);
+pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<Token> =
+    LazyLock::new(|| Token::from_str(DEFAULT_VALID_TOKEN).expect("Invalid token"));
 
 /// Custom error type for track resolve errors.
 #[derive(ThisError, Debug)]
