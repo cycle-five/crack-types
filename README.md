@@ -3,6 +3,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Rust Version](https://img.shields.io/badge/rust-1.85.0%2B-orange.svg)](https://www.rust-lang.org/)
 [![Crates.io](https://img.shields.io/crates/v/crack-types.svg)](https://crates.io/crates/crack-types)
+[![Rust CI](https://github.com/cycle-five/crack-types/actions/workflows/rust.yml/badge.svg)](https://github.com/cycle-five/crack-types/actions/workflows/rust.yml)
 
 Common types and utilities for [Crack Tunes](https://cracktun.es/) - a Discord music bot.
 
@@ -59,7 +60,7 @@ fn create_music_query(input: &str) -> QueryType {
 The library provides optional features that can be enabled in your `Cargo.toml`:
 
 - `crack-tracing`: Enables tracing for debugging and logging (enabled by default)
-- `crack-gpt`: Enables GPT-related functionality
+- `crack-gpt`: Enables GPT-related functionality (TODO)
 
 ```toml
 [dependencies]
@@ -93,6 +94,18 @@ Simple functions for working with URLs:
 ## Requirements
 
 - Rust 1.85.0 or higher
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and testing. The pipeline includes:
+
+- Building and testing on multiple platforms (Linux, macOS, Windows)
+- Testing with multiple Rust toolchains (stable, beta, nightly)
+- Code coverage reporting with cargo-llvm-cov and codecov
+- Code quality checks with clippy and rustfmt
+- Package publishing verification
+
+The CI pipeline uses modern GitHub Actions including `dtolnay/rust-toolchain` and `Swatinem/rust-cache` for efficient builds. You can see the full workflow configuration in [.github/workflows/rust.yml](.github/workflows/rust.yml).
 
 ## License
 
