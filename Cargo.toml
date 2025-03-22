@@ -1,0 +1,93 @@
+[package]
+name = "crack-types"
+version = "0.4.0"
+edition = "2021"
+authors = ["Cycle Five <cycle.five@proton.me>"]
+rust-version = "1.85.0"
+publish = true
+license = "MIT"
+description = "Common types for Crack Tunes."
+keywords = ["music", "discord", "bot", "crack", "tunes", "types"]
+categories = [
+  "multimedia::audio",
+  "multimedia::music",
+  "multimedia::discord",
+  "multimedia::bot",
+]
+homepage = "https://cracktun.es/"
+repository = "https://github.com/cycle-five/crack-types"
+
+[features]
+default = ["crack-tracing"]
+crack-gpt = []
+crack-tracing = ["tracing", "tracing-subscriber"]
+
+[dependencies]
+anyhow = "1.0"
+serde_json = "1.0"
+typemap_rev = "0.3.0"
+small-fixed-array = "0.4.7"
+reqwest = { version = "0.12.14", default-features = false, features = [
+  "blocking",
+  "json",
+  "multipart",
+  "rustls-tls",
+  "cookies",
+  "charset",
+  "http2",
+  "macos-system-configuration",
+] }
+url = ">=2.5.4"
+humantime = "2.1"
+thiserror = "2.0.12"
+tracing = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3", features = [
+  "env-filter",
+], optional = true }
+tokio = { version = "1.44.1", features = ["macros", "rt-multi-thread"] }
+
+[dependencies.poise]
+git = "https://github.com/serenity-rs/poise.git"
+branch = "next"
+
+[dependencies.rspotify]
+version = "0.14"
+default-features = false
+features = ["client-reqwest", "reqwest-rustls-tls"]
+
+[dependencies.rusty_ytdl]
+version = "0.7.4"
+default-features = false
+features = ["live", "rustls-tls", "search", "blocking", "ffmpeg"]
+
+[dependencies.serenity]
+version = "0.12.3"
+default-features = false
+features = [
+  "default",
+  "builder",
+  "cache",
+  "collector",
+  "framework",
+  "gateway",
+  "http",
+  "model",
+  "voice",
+  "voice_model",
+  "utils",
+  "tokio_task_builder",
+  "interactions_endpoint",
+  "chrono",
+  "rustls_backend"
+]
+
+[dependencies.songbird]
+version = "0.5.0"
+features = [
+  "driver", "gateway", "serenity", "rustls", "receive"
+]
+
+[dependencies.sqlx]
+version = "0.8.3"
+default-features = false
+features = ["runtime-tokio", "tls-rustls", "macros", "postgres", "chrono", "migrate", "json"]
