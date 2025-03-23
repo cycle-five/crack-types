@@ -2,16 +2,16 @@
 // ------------------------------------------------------------------
 // Modules
 // ------------------------------------------------------------------
+pub mod errors;
 pub mod http;
+pub mod messaging;
 pub mod metadata;
 pub mod mocks;
-pub mod messaging;
 pub mod reply_handle;
-pub mod errors;
 
-use errors::Error;
-pub use rspotify::model::{SimplifiedAlbum, SimplifiedArtist, TrackId, FullTrack};
-pub use rusty_ytdl::{VideoInfo, VideoDetails};
+use errors::{CrackedError, Error};
+pub use rspotify::model::{FullTrack, SimplifiedAlbum, SimplifiedArtist, TrackId};
+pub use rusty_ytdl::{VideoDetails, VideoInfo};
 pub use songbird::input::{AuxMetadata, YoutubeDl};
 pub use std::time::Duration;
 
@@ -485,7 +485,10 @@ pub fn load_key(k: &str) -> Result<String, Error> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{metadata::{video_details_to_aux_metadata, video_info_to_aux_metadata}, mocks::build_mock_rusty_video_details};
+    use crate::{
+        metadata::{video_details_to_aux_metadata, video_info_to_aux_metadata},
+        mocks::build_mock_rusty_video_details,
+    };
     use small_fixed_array::FixedString;
 
     use super::*;

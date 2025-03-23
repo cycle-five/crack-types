@@ -1,20 +1,20 @@
 //! # Error Handling
-//! 
+//!
 //! This module provides an improved implementation of the error handling system
 //! for the Crack Types library. It includes enhancements to the existing `CrackedError`
 //! design, additional utilities, and comprehensive documentation.
 
-use crate::messages::COULD_NOT_FIND_PERMS;
 use crate::messaging::messages::{
-    EMPTY_SEARCH_RESULT, FAIL_AUDIO_STREAM_RUSTY_YTDL_METADATA, FAIL_AUTHOR_DISCONNECTED,
-    FAIL_AUTHOR_NOT_FOUND, FAIL_EMPTY_VECTOR, FAIL_INSERT, FAIL_INSERT_GUILD_SETTINGS,
-    FAIL_INVALID_PERMS, FAIL_INVALID_TOPGG_TOKEN, FAIL_MISSING_BOT_PERMISSIONS,
-    FAIL_MISSING_USER_PERMISSIONS, FAIL_NOTHING_PLAYING, FAIL_NOT_IMPLEMENTED,
-    FAIL_NO_QUERY_PROVIDED, FAIL_NO_SONGBIRD, FAIL_NO_VIRUSTOTAL_API_KEY, FAIL_NO_VOICE_CONNECTION,
-    FAIL_PARSE_TIME, FAIL_PLAYLIST_FETCH, FAIL_RESUME, FAIL_TO_SET_CHANNEL_SIZE,
-    FAIL_WRONG_CHANNEL, GUILD_ONLY, MISSING_ENV_VAR, NOT_IN_MUSIC_CHANNEL, NO_CHANNEL_ID,
-    NO_DATABASE_POOL, NO_GUILD_CACHED, NO_GUILD_ID, NO_GUILD_SETTINGS, NO_METADATA, NO_TRACK_NAME,
-    NO_USER_AUTOPLAY, QUEUE_IS_EMPTY, ROLE_NOT_FOUND, SPOTIFY_AUTH_FAILED, UNAUTHORIZED_USER,
+    COULD_NOT_FIND_PERMS, EMPTY_SEARCH_RESULT, FAIL_AUDIO_STREAM_RUSTY_YTDL_METADATA,
+    FAIL_AUTHOR_DISCONNECTED, FAIL_AUTHOR_NOT_FOUND, FAIL_EMPTY_VECTOR, FAIL_INSERT,
+    FAIL_INSERT_GUILD_SETTINGS, FAIL_INVALID_PERMS, FAIL_INVALID_TOPGG_TOKEN,
+    FAIL_MISSING_BOT_PERMISSIONS, FAIL_MISSING_USER_PERMISSIONS, FAIL_NOTHING_PLAYING,
+    FAIL_NOT_IMPLEMENTED, FAIL_NO_QUERY_PROVIDED, FAIL_NO_SONGBIRD, FAIL_NO_VIRUSTOTAL_API_KEY,
+    FAIL_NO_VOICE_CONNECTION, FAIL_PARSE_TIME, FAIL_PLAYLIST_FETCH, FAIL_RESUME,
+    FAIL_TO_SET_CHANNEL_SIZE, FAIL_WRONG_CHANNEL, GUILD_ONLY, MISSING_ENV_VAR,
+    NOT_IN_MUSIC_CHANNEL, NO_CHANNEL_ID, NO_DATABASE_POOL, NO_GUILD_CACHED, NO_GUILD_ID,
+    NO_GUILD_SETTINGS, NO_METADATA, NO_TRACK_NAME, NO_USER_AUTOPLAY, QUEUE_IS_EMPTY,
+    ROLE_NOT_FOUND, SPOTIFY_AUTH_FAILED, UNAUTHORIZED_USER,
 };
 use crate::TrackResolveError;
 
@@ -38,7 +38,7 @@ use tokio::time::error::Elapsed;
 pub type Error = Box<dyn StdError + Send + Sync>;
 
 /// A specialized Result type for Crack operations.
-/// 
+///
 /// This is a type alias for `Result<T, CrackedError>`, which enables cleaner
 /// signatures and error handling in the crate.
 ///
@@ -94,7 +94,7 @@ pub enum CrackedError {
     WrongVoiceChannel,
     /// Error when trying to join a channel
     JoinChannelError(Box<JoinError>),
-    
+
     //
     // Command and Input errors
     //
@@ -119,7 +119,7 @@ pub enum CrackedError {
     InvalidIP(Cow<'static, str>),
     /// Value not in valid range
     NotInRange(Cow<'static, str>, isize, isize, isize),
-    
+
     //
     // Missing resource errors
     //
@@ -165,7 +165,7 @@ pub enum CrackedError {
     LogChannelWarning(Cow<'static, str>, GuildId),
     /// No user autoplay configured
     NoUserAutoplay,
-    
+
     //
     // Operation failures
     //
@@ -187,7 +187,7 @@ pub enum CrackedError {
     NotImplemented,
     /// Unimplemented event
     UnimplementedEvent(ChannelId, Cow<'static, str>),
-    
+
     //
     // External service errors
     //
@@ -209,7 +209,7 @@ pub enum CrackedError {
     ResolveError(TrackResolveError),
     /// Video error from rusty_ytdl
     VideoError(VideoError),
-    
+
     //
     // Technical errors
     //
@@ -240,7 +240,7 @@ pub enum CrackedError {
     TrackFail(Error),
     /// URL parsing error
     UrlParse(url::ParseError),
-    
+
     //
     // General errors
     //
@@ -285,7 +285,7 @@ unsafe impl Send for CrackedError {}
 unsafe impl Sync for CrackedError {}
 
 /// Implementation of the `Display` trait for the `CrackedError` enum.
-/// 
+///
 /// This formats error messages that will be sent as responses to Discord interactions.
 impl Display for CrackedError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -300,13 +300,14 @@ impl Display for CrackedError {
             Self::AuthorNotFound => f.write_str(FAIL_AUTHOR_NOT_FOUND),
             Self::InvalidPermissions => f.write_str(FAIL_INVALID_PERMS),
             Self::NotConnected => f.write_str(FAIL_NO_VOICE_CONNECTION),
-            Self::NotInMusicChannel(channel_id) => {
-                f.write_fmt(format_args!("{NOT_IN_MUSIC_CHANNEL} {}", channel_id.mention()))
-            }
+            Self::NotInMusicChannel(channel_id) => f.write_fmt(format_args!(
+                "{NOT_IN_MUSIC_CHANNEL} {}",
+                channel_id.mention()
+            )),
             Self::UnauthorizedUser => f.write_str(UNAUTHORIZED_USER),
             Self::WrongVoiceChannel => f.write_str(FAIL_WRONG_CHANNEL),
             Self::JoinChannelError(err) => write!(f, "{err}"),
-            
+
             // Command and input errors
             Self::CommandFailed(program, status, output) => write!(
                 f,
@@ -326,9 +327,12 @@ impl Display for CrackedError {
             }
             Self::InvalidIP(ip) => write!(f, "Invalid ip {ip}"),
             Self::NotInRange(param, value, lower, upper) => {
-                write!(f, "`{param}` should be between {lower} and {upper} but was {value}")
+                write!(
+                    f,
+                    "`{param}` should be between {lower} and {upper} but was {value}"
+                )
             }
-            
+
             // Missing resource errors
             Self::GuildOnly => f.write_str(GUILD_ONLY),
             Self::NoChannelId => f.write_str(NO_CHANNEL_ID),
@@ -365,7 +369,7 @@ impl Display for CrackedError {
                 write!(f, "No log channel set for {event_name} in {guild_id}")
             }
             Self::NoUserAutoplay => f.write_str(NO_USER_AUTOPLAY),
-            
+
             // Operation failures
             Self::FailedResume => f.write_str(FAIL_RESUME),
             Self::FailedToInsert => f.write_str(FAIL_INSERT),
@@ -380,7 +384,7 @@ impl Display for CrackedError {
             Self::UnimplementedEvent(channel, value) => {
                 write!(f, "Unimplemented event {value} for channel {channel}")
             }
-            
+
             // External service errors
             Self::AudioStream(err) => write!(f, "{err}"),
             Self::AudioStreamRustyYtdlMetadata => {
@@ -393,7 +397,7 @@ impl Display for CrackedError {
             Self::SpotifyAuth => f.write_str(SPOTIFY_AUTH_FAILED),
             Self::ResolveError(err) => write!(f, "{err}"),
             Self::VideoError(err) => write!(f, "{err}"),
-            
+
             // Technical errors
             Self::Anyhow(err) => write!(f, "{err}"),
             #[cfg(feature = "crack-gpt")]
@@ -409,7 +413,7 @@ impl Display for CrackedError {
             Self::SQLX(err) => write!(f, "{err}"),
             Self::TrackFail(err) => write!(f, "{err}"),
             Self::UrlParse(err) => write!(f, "{err}"),
-            
+
             // General errors
             Self::Other(msg) => f.write_str(msg),
         }
@@ -434,7 +438,7 @@ impl PartialEq for CrackedError {
                 l0.to_string() == r0.to_string()
             }
             (Self::Serenity(l0), Self::Serenity(r0)) => format!("{l0:?}") == format!("{r0:?}"),
-            
+
             // For all other variants, only compare the discriminant (variant type)
             _ => std::mem::discriminant(self) == std::mem::discriminant(other),
         }
@@ -559,7 +563,7 @@ impl From<AuxMetadataError> for CrackedError {
 pub trait Verifiable<T> {
     /// Tests if the value represents a "truthy" state
     fn to_bool(&self) -> bool;
-    
+
     /// Extracts the inner value, panicking if not in a "truthy" state
     fn unpack(self) -> T;
 }
@@ -618,7 +622,7 @@ where
 /// ```
 ///
 /// # Errors
-/// 
+///
 /// Returns `Err(err)` if the condition is false (or equivalent).
 pub fn verify<K, T: Verifiable<K>>(verifiable: T, err: CrackedError) -> CrackedResult<K> {
     if verifiable.to_bool() {
@@ -632,7 +636,7 @@ pub fn verify<K, T: Verifiable<K>>(verifiable: T, err: CrackedError) -> CrackedR
 pub trait ErrorExt<T> {
     /// Adds a static string context to the error
     fn context(self, ctx: &'static str) -> CrackedResult<T>;
-    
+
     /// Maps any error type to CrackedError::Other with the given message
     fn map_err_to_other(self, msg: &'static str) -> CrackedResult<T>;
 }
@@ -644,7 +648,7 @@ impl<T, E: Into<CrackedError>> ErrorExt<T> for Result<T, E> {
             CrackedError::Other(Cow::Owned(format!("{}: {}", ctx, err)))
         })
     }
-    
+
     fn map_err_to_other(self, msg: &'static str) -> CrackedResult<T> {
         self.map_err(|_| CrackedError::Other(Cow::Borrowed(msg)))
     }
@@ -653,7 +657,10 @@ impl<T, E: Into<CrackedError>> ErrorExt<T> for Result<T, E> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::io::{Error as StdError, ErrorKind};
+    use std::{
+        error::Error,
+        io::{Error as StdError, ErrorKind},
+    };
 
     #[test]
     fn test_verify() {
@@ -677,18 +684,18 @@ mod test {
     #[test]
     fn test_error_context() {
         let result: Result<(), std::io::Error> = Err(std::io::Error::new(
-            std::io::ErrorKind::NotFound, 
-            "file not found"
+            std::io::ErrorKind::NotFound,
+            "file not found",
         ));
-        
+
         let with_context = result.context("Failed to read configuration");
         assert!(with_context.is_err());
-        
+
         match with_context {
             Err(CrackedError::Other(msg)) => {
                 assert!(msg.contains("Failed to read configuration"));
                 assert!(msg.contains("file not found"));
-            },
+            }
             _ => panic!("Expected Other error variant with context"),
         }
     }
@@ -709,38 +716,38 @@ mod test {
             CrackedError::UnauthorizedUser,
             CrackedError::NotInRange("test", 1, 2, 3),
         ];
-        
+
         // Just verify that all error variants can be formatted without panicking
         for err in &errors {
             let display = format!("{}", err);
             assert!(!display.is_empty(), "Error display should not be empty");
         }
     }
-    
+
     #[test]
     fn test_error_source() {
         // Test error source chain for wrapped errors
         let io_err = std::io::Error::new(ErrorKind::NotFound, "test error");
         let cracked_err = CrackedError::IO(io_err);
-        
+
         // Should have a source
         assert!(cracked_err.source().is_some());
-        
+
         // The source should be the io error
         let source = cracked_err.source().unwrap();
         assert_eq!(source.to_string(), "test error");
     }
-    
+
     #[test]
     fn test_map_err_to_other() {
         let result: Result<(), &str> = Err("failed");
         let mapped = result.map_err_to_other("Operation failed");
-        
+
         assert!(mapped.is_err());
         match mapped {
             Err(CrackedError::Other(msg)) => {
                 assert_eq!(msg, "Operation failed");
-            },
+            }
             _ => panic!("Expected Other error variant"),
         }
     }
