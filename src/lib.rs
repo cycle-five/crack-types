@@ -3,21 +3,17 @@
 // Modules
 // ------------------------------------------------------------------
 pub mod http;
-pub use http::*;
 pub mod metadata;
-pub use metadata::*;
 pub mod mocks;
-pub use mocks::*;
 pub mod messaging;
-pub use messaging::*;
 pub mod reply_handle;
-pub use reply_handle::*;
 pub mod errors;
-pub use errors::*;
 
-use rspotify::model::SimplifiedAlbum;
-use rspotify::model::SimplifiedArtist;
-use rspotify::model::TrackId;
+use errors::Error;
+pub use rspotify::model::{SimplifiedAlbum, SimplifiedArtist, TrackId, FullTrack};
+pub use rusty_ytdl::{VideoInfo, VideoDetails};
+pub use songbird::input::{AuxMetadata, YoutubeDl};
+pub use std::time::Duration;
 
 // ------------------------------------------------------------------
 // Non-public imports
@@ -489,7 +485,7 @@ pub fn load_key(k: &str) -> Result<String, Error> {
 
 #[cfg(test)]
 mod tests {
-    use crate::mocks::build_mock_rusty_video_details;
+    use crate::{metadata::{video_details_to_aux_metadata, video_info_to_aux_metadata}, mocks::build_mock_rusty_video_details};
     use small_fixed_array::FixedString;
 
     use super::*;
