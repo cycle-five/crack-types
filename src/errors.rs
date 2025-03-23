@@ -45,7 +45,7 @@ pub type Error = Box<dyn StdError + Send + Sync>;
 /// # Examples
 ///
 /// ```rust
-/// use crack_types::{CrackedResult, CrackedError};
+/// use crack_types::errors::{CrackedResult, CrackedError};
 ///
 /// fn example_function() -> CrackedResult<String> {
 ///     // Example implementation
@@ -555,6 +555,12 @@ impl From<AuxMetadataError> for CrackedError {
     }
 }
 
+impl From<&'static str> for CrackedError {
+    fn from(err: &'static str) -> Self {
+        CrackedError::Other(Cow::Borrowed(err))
+    }
+}
+
 /// Helper for working with boolean-like types in error handling.
 ///
 /// This trait provides a unified way to test if a value is "truthy" and to extract
@@ -609,7 +615,7 @@ where
 /// # Examples
 ///
 /// ```
-/// use crack_types::{verify, CrackedError};
+/// pub use crack_types::errors::{verify, CrackedError};
 ///
 /// let optional: Option<i32> = Some(42);
 /// let result = verify(optional, CrackedError::NotImplemented)?;
@@ -659,7 +665,7 @@ mod test {
     use super::*;
     use std::{
         error::Error,
-        io::{Error as StdError, ErrorKind},
+        io::{ErrorKind},
     };
 
     #[test]
@@ -714,7 +720,7 @@ mod test {
             CrackedError::PlayListFail,
             CrackedError::ParseTimeFail,
             CrackedError::UnauthorizedUser,
-            CrackedError::NotInRange("test", 1, 2, 3),
+            CrackedError::NotInRange(Cow::Borrowed("test"), 1, 2, 3),
         ];
 
         // Just verify that all error variants can be formatted without panicking
