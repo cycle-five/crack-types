@@ -59,14 +59,15 @@ features = ["live", "rustls-tls", "search", "blocking", "ffmpeg"]
 [dependencies.serenity]
 git = "https://github.com/serenity-rs/serenity.git"
 branch = "next"
-# version = "0.12.4"
+version = "0.12.4"
 
 [dependencies.poise]
 git = "https://github.com/serenity-rs/poise.git"
 branch = "serenity-next"
+version = "0.6.1"
 
 [dependencies.songbird]
-# version = "0.5.0"
+version = "0.5.0"
 git = "https://github.com/serenity-rs/songbird.git"
 branch = "serenity-next"
 features = [
