@@ -36,13 +36,13 @@ jobs:
       uses: Swatinem/rust-cache@v2
     
     - name: Build (default features)
-      run: cargo build --verbose
+      run: cargo build
     
     - name: Build (all features)
-      run: cargo build --verbose --all-features
+      run: cargo build --all-features
     
     - name: Build (no default features)
-      run: cargo build --verbose --no-default-features
+      run: cargo build --no-default-features
     
     - name: Run tests
       run: cargo test --verbose
