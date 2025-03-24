@@ -663,10 +663,7 @@ impl<T, E: Into<CrackedError>> ErrorExt<T> for Result<T, E> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::{
-        error::Error,
-        io::ErrorKind,
-    };
+    use std::{error::Error, io::ErrorKind};
 
     #[test]
     fn test_verify() {
