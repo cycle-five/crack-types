@@ -1,10 +1,10 @@
 use rusty_ytdl::search::Channel as RustyYtChannel;
 use rusty_ytdl::search::Video as RustyYtVideo;
 use rusty_ytdl::Thumbnail as RustyYtThumbnail;
+use poise::serenity_prelude as serenity;
 use serenity::all::Token;
 
 use crate::DEFAULT_VALID_TOKEN_TOKEN;
-//use serenity::all::Token;
 
 /// Builds a mock [`RustyYtVideo`] for testing purposes.
 #[must_use]
