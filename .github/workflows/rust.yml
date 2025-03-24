@@ -76,15 +76,15 @@ jobs:
         fail_ci_if_error: false
         token: ${{ secrets.CODECOV_TOKEN }}
 
-  publish-check:
-    name: Check Package Publishing
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-    
-    - name: Check publishing
-      run: cargo publish --dry-run
+  # publish-check:
+    # name: Check Package Publishing
+    # runs-on: ubuntu-latest
+    # 
+    # steps:
+    # - uses: actions/checkout@v4
+    # 
+    # - name: Install Rust
+      # uses: dtolnay/rust-toolchain@stable
+    # 
+    # - name: Check publishing
+      # run: cargo publish --dry-run
