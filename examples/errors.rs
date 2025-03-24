@@ -3,8 +3,8 @@
 //! This module provides examples and additional documentation for the error handling
 //! system in the `crack-types` crate.
 
-use crate::{CrackedError, CrackedResult, verify};
-use crate::http::parse_url;
+use crack_types::{CrackedError, CrackedResult, verify};
+use crack_types::http::parse_url;
 use std::fmt;
 
 /// Example of creating custom errors that can be converted to CrackedError
@@ -27,7 +27,7 @@ impl From<MyCustomError> for CrackedError {
     fn from(err: MyCustomError) -> Self {
         // Map your custom error to an appropriate CrackedError variant
         match err {
-            MyCustomError::ConnectionError(msg) => CrackedError::Other(Box::leak(msg.into_boxed_str())),
+            MyCustomError::ConnectionError(msg) => CrackedError::Other(std::borrow::Cow::Borrowed(Box::leak(msg.into_boxed_str()))),
             MyCustomError::NotFoundError(_) => CrackedError::NoTrackName,
             MyCustomError::ConfigError(_) => CrackedError::InvalidPermissions,
         }
@@ -176,4 +176,9 @@ mod tests {
             "While processing request: failed operation"
         );
     }
+}
+
+fn main() {
+    // Run tests   
+    println!("This is a test module and does not contain any executable code.");
 }

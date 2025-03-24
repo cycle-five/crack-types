@@ -9,11 +9,10 @@ pub mod metadata;
 pub mod mocks;
 pub mod reply_handle;
 
-use errors::{CrackedError, Error};
-pub use rspotify::model::{FullTrack, SimplifiedAlbum, SimplifiedArtist, TrackId};
-pub use rusty_ytdl::{VideoDetails, VideoInfo};
-pub use songbird::input::{AuxMetadata, YoutubeDl};
-pub use std::time::Duration;
+
+use rspotify::model::{FullTrack, SimplifiedAlbum, SimplifiedArtist, TrackId};
+use songbird::input::{AuxMetadata, YoutubeDl};
+use std::time::Duration;
 
 // ------------------------------------------------------------------
 // Non-public imports
@@ -48,6 +47,7 @@ pub type SongbirdCall = Arc<Mutex<Call>>;
 // ------------------------------------------------------------------
 // Public Re-exports
 // ------------------------------------------------------------------
+pub use errors::{CrackedError, Error, verify};
 pub use serenity::all::Attachment;
 pub use serenity::all::UserId;
 
@@ -490,6 +490,7 @@ mod tests {
         mocks::build_mock_rusty_video_details,
     };
     use small_fixed_array::FixedString;
+    use rusty_ytdl::VideoInfo;
 
     use super::*;
 

@@ -665,7 +665,7 @@ mod test {
     use super::*;
     use std::{
         error::Error,
-        io::{ErrorKind},
+        io::ErrorKind,
     };
 
     #[test]
