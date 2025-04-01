@@ -1,6 +1,6 @@
 [package]
 name = "crack-types"
-version = "0.4.0"
+version = "0.1.0"
 edition = "2021"
 authors = ["Cycle Five <cycle.five@proton.me>"]
 rust-version = "1.88"
