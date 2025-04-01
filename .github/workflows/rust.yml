@@ -27,6 +27,9 @@ jobs:
         toolchain: ${{ matrix.rust }}
         components: rustfmt, clippy
     
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y cmake pkg-config libssl-dev ffmpeg libopus-dev
+      
     - name: Cache dependencies
       uses: Swatinem/rust-cache@v2
     
