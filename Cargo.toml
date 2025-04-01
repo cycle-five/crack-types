@@ -38,7 +38,7 @@ reqwest = { version = "0.12.15", default-features = false, features = [
   "macos-system-configuration",
 ] }
 url = ">=2.5.4"
-humantime = "2.1"
+humantime = "2.2"
 thiserror = "2.0"
 tracing = { version = "0.1", optional = true }
 tracing-subscriber = { version = "0.3", features = [
@@ -59,15 +59,15 @@ features = ["live", "rustls-tls", "search", "blocking", "ffmpeg"]
 [dependencies.serenity]
 git = "https://github.com/serenity-rs/serenity.git"
 branch = "next"
-version = "0.12.4"
+#version = "0.12.4"
 
 [dependencies.poise]
 git = "https://github.com/serenity-rs/poise.git"
 branch = "serenity-next"
-version = "0.6.1"
+#version = "0.6.1"
 
 [dependencies.songbird]
-version = "0.5.0"
+#version = "0.5.0"
 git = "https://github.com/serenity-rs/songbird.git"
 branch = "serenity-next"
 features = [
