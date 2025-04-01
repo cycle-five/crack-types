@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Cycle Five <cycle.five@proton.me>"]
 rust-version = "1.88"
-publish = true
+publish = false
 license = "MIT"
 description = "Common types for Crack Tunes."
 keywords = ["music", "discord", "bot", "crack", "tunes", "types"]
@@ -21,6 +21,7 @@ repository = "https://github.com/cycle-five/crack-types"
 default = ["crack-tracing"]
 crack-gpt = []
 crack-tracing = ["tracing", "tracing-subscriber"]
+serenity-next = []
 
 [dependencies]
 anyhow = "1.0"
@@ -60,11 +61,13 @@ features = ["live", "rustls-tls", "search", "blocking", "ffmpeg"]
 git = "https://github.com/serenity-rs/serenity.git"
 branch = "next"
 version = "0.12.4"
+package = "serenity"
 
 [dependencies.poise]
 git = "https://github.com/serenity-rs/poise.git"
 branch = "serenity-next"
 version = "0.6.1"
+package = "poise"
 
 [dependencies.songbird]
 version = "0.5.0"
@@ -73,6 +76,7 @@ branch = "serenity-next"
 features = [
   "driver", "gateway", "serenity", "rustls", "receive"
 ]
+package = "songbird"
 
 [dependencies.sqlx]
 version = "0.8.3"
