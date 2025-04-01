@@ -2,27 +2,21 @@
 // ------------------------------------------------------------------
 // Modules
 // ------------------------------------------------------------------
-pub mod http;
-pub use http::*;
-pub mod metadata;
-pub use metadata::*;
-pub mod mocks;
-pub use mocks::*;
-pub mod messaging;
-pub use messaging::*;
-pub mod reply_handle;
-pub use reply_handle::*;
 pub mod errors;
-pub use errors::*;
+pub mod http;
+pub mod messaging;
+pub mod metadata;
+pub mod mocks;
+pub mod reply_handle;
 
-use rspotify::model::SimplifiedAlbum;
-use rspotify::model::SimplifiedArtist;
-use rspotify::model::TrackId;
+use rspotify::model::{FullTrack, SimplifiedAlbum, SimplifiedArtist, TrackId};
+use songbird::input::{AuxMetadata, YoutubeDl};
+use std::time::Duration;
 
 // ------------------------------------------------------------------
 // Non-public imports
 // ------------------------------------------------------------------
-// use serenity::all::Token;
+use serenity::all::Token;
 use serenity::model::id::{ChannelId, GuildId};
 use small_fixed_array::{FixedString, ValidLength};
 use songbird::Call;
@@ -52,6 +46,7 @@ pub type SongbirdCall = Arc<Mutex<Call>>;
 // ------------------------------------------------------------------
 // Public Re-exports
 // ------------------------------------------------------------------
+pub use errors::{verify, CrackedError, Error};
 pub use serenity::all::Attachment;
 pub use serenity::all::UserId;
 
@@ -66,10 +61,8 @@ pub const MUSIC_SEARCH_SUFFIX: &str = r#"\"topic\""#;
 pub(crate) static DEFAULT_VALID_TOKEN: &str =
     "XXXXXXXXXXXXXXXXXXXXXXXX.X_XXXX.XXXXXXXXXXXXXXXXXXXXXX_XXXX";
 
-//pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<Token> =
-//    LazyLock::new(|| Token::from_str(DEFAULT_VALID_TOKEN).expect("Invalid token"));
-pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<&'static str> =
-    LazyLock::new(|| DEFAULT_VALID_TOKEN);
+pub(crate) static DEFAULT_VALID_TOKEN_TOKEN: LazyLock<Token> =
+    LazyLock::new(|| Token::from_str(DEFAULT_VALID_TOKEN).expect("Invalid token"));
 
 /// Custom error type for track resolve errors.
 #[derive(ThisError, Debug)]
@@ -271,7 +264,6 @@ pub enum QueryType {
     None,
 }
 
-//type BoxedYoutubeDl = Box<(YoutubeDl<'static>, AuxMetadata)>;
 pub struct BoxedYoutubeDl(pub Box<(YoutubeDl<'static>, AuxMetadata)>);
 
 impl From<BoxedYoutubeDl> for QueryType {
@@ -281,10 +273,12 @@ impl From<BoxedYoutubeDl> for QueryType {
 }
 
 impl BoxedYoutubeDl {
+    #[must_use]
     pub fn new(src: YoutubeDl<'static>, metadata: AuxMetadata) -> Self {
         BoxedYoutubeDl(Box::new((src, metadata)))
     }
 
+    #[must_use]
     pub fn source_url(&self) -> Option<String> {
         let boxed = &self.0;
         boxed.1.source_url.clone()
@@ -491,7 +485,11 @@ pub fn load_key(k: &str) -> Result<String, Error> {
 
 #[cfg(test)]
 mod tests {
-    use crate::mocks::build_mock_rusty_video_details;
+    use crate::{
+        metadata::{video_details_to_aux_metadata, video_info_to_aux_metadata},
+        mocks::build_mock_rusty_video_details,
+    };
+    use rusty_ytdl::VideoInfo;
     use small_fixed_array::FixedString;
 
     use super::*;
