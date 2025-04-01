@@ -151,7 +151,7 @@ pub enum CrackedError {
     NoSongbird,
     /// Top.gg token is invalid
     InvalidTopGGToken,
-    /// No VirusTotal API key configured
+    /// No [`VirusTotal`] API key configured
     NoVirusTotalApiKey,
     /// Role not found
     RoleNotFound(serenity::all::RoleId),
@@ -193,7 +193,7 @@ pub enum CrackedError {
     //
     /// Audio stream error from Songbird
     AudioStream(AudioStreamError),
-    /// Audio stream metadata error from rusty_ytdl
+    /// Audio stream metadata error from [`rusty_ytdl`]
     AudioStreamRustyYtdlMetadata,
     /// Auxiliary metadata error
     AuxMetadataError(AuxMetadataError),
@@ -207,7 +207,7 @@ pub enum CrackedError {
     SpotifyAuth,
     /// Track resolution error
     ResolveError(TrackResolveError),
-    /// Video error from rusty_ytdl
+    /// Video error from [`rusty_ytdl`]
     VideoError(VideoError),
 
     //
@@ -234,7 +234,7 @@ pub enum CrackedError {
     Songbird(Error),
     /// Serenity error
     Serenity(SerenityError),
-    /// SQL error from SQLx
+    /// SQL error from [`SQLx`]
     SQLX(sqlx::Error),
     /// Track failure
     TrackFail(Error),
@@ -284,10 +284,14 @@ unsafe impl Send for CrackedError {}
 /// Safe marker for `CrackedError` to be shared between threads
 unsafe impl Sync for CrackedError {}
 
-/// Implementation of the `Display` trait for the `CrackedError` enum.
+/// Implementation of the [`Display`] trait for the [`CrackedError`] enum.
 ///
 /// This formats error messages that will be sent as responses to Discord interactions.
 impl Display for CrackedError {
+    /// Formats the error message for display.
+    /// # Errors
+    /// -- Returns an error if the formatting fails.
+    #[allow(clippy::too_many_lines)]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             // Connection and authorization errors
@@ -641,9 +645,13 @@ pub fn verify<K, T: Verifiable<K>>(verifiable: T, err: CrackedError) -> CrackedR
 /// Provides a convenient extension trait for adding context to errors
 pub trait ErrorExt<T> {
     /// Adds a static string context to the error
+    /// # Errors
+    /// -- Returns `Err(CrackedError::Other(msg))` if the error is not of type [`CrackedError`]
     fn context(self, ctx: &'static str) -> CrackedResult<T>;
 
-    /// Maps any error type to CrackedError::Other with the given message
+    /// Maps any error type to [`CrackedError::Other`] with the given message
+    /// # Errors
+    /// -- Returns `Err(CrackedError::Other(msg))` if the error is not of type [`CrackedError`]
     fn map_err_to_other(self, msg: &'static str) -> CrackedResult<T>;
 }
 
@@ -651,7 +659,7 @@ impl<T, E: Into<CrackedError>> ErrorExt<T> for Result<T, E> {
     fn context(self, ctx: &'static str) -> CrackedResult<T> {
         self.map_err(|e| {
             let err = e.into();
-            CrackedError::Other(Cow::Owned(format!("{}: {}", ctx, err)))
+            CrackedError::Other(Cow::Owned(format!("{ctx}: {err}")))
         })
     }
 

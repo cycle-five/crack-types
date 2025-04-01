@@ -264,7 +264,6 @@ pub enum QueryType {
     None,
 }
 
-//type BoxedYoutubeDl = Box<(YoutubeDl<'static>, AuxMetadata)>;
 pub struct BoxedYoutubeDl(pub Box<(YoutubeDl<'static>, AuxMetadata)>);
 
 impl From<BoxedYoutubeDl> for QueryType {
@@ -274,10 +273,12 @@ impl From<BoxedYoutubeDl> for QueryType {
 }
 
 impl BoxedYoutubeDl {
+    #[must_use]
     pub fn new(src: YoutubeDl<'static>, metadata: AuxMetadata) -> Self {
         BoxedYoutubeDl(Box::new((src, metadata)))
     }
 
+    #[must_use]
     pub fn source_url(&self) -> Option<String> {
         let boxed = &self.0;
         boxed.1.source_url.clone()
