@@ -24,6 +24,7 @@ crack-tracing = ["tracing", "tracing-subscriber"]
 serenity-next = []
 
 [dependencies]
+audiopus = "0.3.0-rc.0"
 anyhow = "1.0"
 serde_json = "1.0"
 typemap_rev = "0.3"
