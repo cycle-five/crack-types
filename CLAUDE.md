@@ -4,7 +4,7 @@
 - Build: `cargo build`
 - Test all: `cargo test`
 - Test single: `cargo test test_name`
-- Lint: `cargo clippy`
+- Lint: `cargo clippy -- -D warnings -W clippy::pedantic`
 - Format: `cargo fmt`
 - Check format: `cargo fmt -- --check`
 - Documentation: `cargo doc --open`
