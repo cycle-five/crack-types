@@ -214,7 +214,7 @@ pub enum CrackedError {
     #[error("{FAIL_INVALID_TOPGG_TOKEN}")]
     InvalidTopGGToken,
     
-    /// No VirusTotal API key configured
+    /// No `VirusTotal` API key configured
     #[error("{FAIL_NO_VIRUSTOTAL_API_KEY}")]
     NoVirusTotalApiKey,
     
@@ -227,11 +227,11 @@ pub enum CrackedError {
     MissingEnvVar(String),
     
     /// Missing user permissions
-    #[error("{FAIL_MISSING_USER_PERMISSIONS}: {}", .0.as_ref().map_or_else(|| COULD_NOT_FIND_PERMS.to_string(), |p| p.to_string()))]
+    #[error("{FAIL_MISSING_USER_PERMISSIONS}: {}", .0.as_ref().map_or_else(|| COULD_NOT_FIND_PERMS.to_string(), std::string::ToString::to_string))]
     MissingUserPermissions(Option<Permissions>),
     
     /// Missing bot permissions
-    #[error("{FAIL_MISSING_BOT_PERMISSIONS}: {}", .0.as_ref().map_or_else(|| COULD_NOT_FIND_PERMS.to_string(), |p| p.to_string()))]
+    #[error("{FAIL_MISSING_BOT_PERMISSIONS}: {}", .0.as_ref().map_or_else(|| COULD_NOT_FIND_PERMS.to_string(), std::string::ToString::to_string))]
     MissingBotPermissions(Option<Permissions>),
     
     /// Log channel warning
@@ -288,7 +288,7 @@ pub enum CrackedError {
     #[error("{0}")]
     AudioStream(#[from] AudioStreamError),
     
-    /// Audio stream metadata error from rusty_ytdl
+    /// Audio stream metadata error from `rusty_ytdl`
     #[error("{FAIL_AUDIO_STREAM_RUSTY_YTDL_METADATA}")]
     AudioStreamRustyYtdlMetadata,
     
@@ -316,7 +316,7 @@ pub enum CrackedError {
     #[error("{0}")]
     ResolveError(#[from] TrackResolveError),
     
-    /// Video error from rusty_ytdl
+    /// Video error from `rusty_ytdl`
     #[error("{0}")]
     VideoError(#[from] VideoError),
 
@@ -360,7 +360,7 @@ pub enum CrackedError {
     #[error("{0}")]
     Serenity(#[from] SerenityError),
     
-    /// SQL error from SQLx
+    /// SQL error from `SQLx`
     #[error("{0}")]
     SQLX(#[from] sqlx::Error),
     
@@ -405,7 +405,7 @@ impl PartialEq for CrackedError {
             | (Self::AlreadyConnected(l0), Self::AlreadyConnected(r0)) => {
                 l0.to_string() == r0.to_string()
             }
-            (Self::Serenity(l0), Self::Serenity(r0)) => format!("{:?}", l0) == format!("{:?}", r0),
+            (Self::Serenity(l0), Self::Serenity(r0)) => format!("{l0:?}") == format!("{r0:?}"),
             
             // For all other variants, only compare the discriminant (variant type)
             _ => std::mem::discriminant(self) == std::mem::discriminant(other),
@@ -503,11 +503,11 @@ where
 ///
 /// let optional: Option<i32> = Some(42);
 /// let result = verify(optional, CrackedError::NotImplemented)?;
-/// assert_eq\!(result, 42);
+/// assert_eq!(result, 42);
 ///
 /// let bool_val = true;
 /// let result = verify(bool_val, CrackedError::NotImplemented)?;
-/// assert_eq\!(result, true);
+/// assert_eq!(result, true);
 /// # Ok::<(), CrackedError>(())
 /// ```
 ///
@@ -531,7 +531,7 @@ pub trait ErrorExt<T> {
     /// Returns `Err(CrackedError::Other(msg))` if the result contains an error
     fn context(self, ctx: &'static str) -> CrackedResult<T>;
     
-    /// Maps any error type to CrackedError::Other with the given message
+    /// Maps any error type to `CrackedError::Other` with the given message
     /// 
     /// # Errors
     /// 
@@ -543,7 +543,7 @@ impl<T, E: Into<CrackedError>> ErrorExt<T> for Result<T, E> {
     fn context(self, ctx: &'static str) -> CrackedResult<T> {
         self.map_err(|e| {
             let err = e.into();
-            CrackedError::Other(Cow::Owned(format!("{}: {}", ctx, err)))
+            CrackedError::Other(Cow::Owned(format!("{ctx}: {err}")))
         })
     }
     
@@ -614,7 +614,7 @@ mod test {
         
         // Just verify that all error variants can be formatted without panicking
         for err in &errors {
-            let display = format!("{}", err);
+            let display = format!("{err}");
             assert!(!display.is_empty(), "Error display should not be empty");
         }
     }

@@ -7,7 +7,7 @@ use crack_types::http::parse_url;
 use crack_types::{verify, CrackedError, CrackedResult};
 use std::fmt;
 
-/// Example of creating custom errors that can be converted to CrackedError
+/// Example of creating custom errors that can be converted to `CrackedError`
 ///
 /// This demonstrates how to create your own error types that can be easily
 /// converted to the library's error type.
@@ -56,7 +56,7 @@ pub fn example_verify() -> CrackedResult<i32> {
     Ok(result)
 }
 
-/// Example of using the Result type with CrackedError
+/// Example of using the Result type with `CrackedError`
 pub fn example_url_parsing(url: &str) -> CrackedResult<()> {
     // Demonstrate how parsing errors are automatically converted
     let _parsed_url = parse_url(url)?;
