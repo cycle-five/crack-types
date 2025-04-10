@@ -9,21 +9,22 @@ pub mod metadata;
 pub mod mocks;
 pub mod reply_handle;
 
-use rspotify::model::{FullTrack, SimplifiedAlbum, SimplifiedArtist, TrackId};
-use songbird::input::{AuxMetadata, YoutubeDl};
-use std::time::Duration;
-
 // ------------------------------------------------------------------
 // Non-public imports
 // ------------------------------------------------------------------
+use rspotify::model::{FullTrack, SimplifiedAlbum, SimplifiedArtist, TrackId};
 use serenity::all::Token;
 use serenity::model::id::{ChannelId, GuildId};
 use small_fixed_array::{FixedString, ValidLength};
-use songbird::Call;
+use songbird::{
+    input::{AuxMetadata, YoutubeDl},
+    Call,
+};
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 use std::sync::{Arc, LazyLock};
+use std::time::Duration;
 use tokio::sync::{Mutex, RwLock};
 #[cfg(feature = "crack-tracing")]
 use tracing::error;

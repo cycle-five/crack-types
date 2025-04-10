@@ -5,6 +5,7 @@ use rusty_ytdl::Thumbnail as RustyYtThumbnail;
 use serenity::all::Token;
 
 use crate::DEFAULT_VALID_TOKEN_TOKEN;
+use crate::metadata::{NewAuxMetadata, search_video_to_aux_metadata};
 
 /// Builds a mock [`RustyYtVideo`] for testing purposes.
 #[must_use]
@@ -107,10 +108,63 @@ pub fn build_mock_rusty_video_details() -> rusty_ytdl::VideoDetails {
     }
 }
 
+/// Builds a mock [`NewAuxMetadata`] for testing purposes.
+#[must_use]
+pub fn build_mock_metadata() -> NewAuxMetadata {
+    let video = build_mock_search_video();
+    NewAuxMetadata::new(search_video_to_aux_metadata(&video))
+}
+
 /// Builds a fake but valid [`Token`] for testing purposes.
 /// # Panics
 /// * If the token is invalid.
 #[must_use]
 pub fn get_valid_token() -> Token {
     DEFAULT_VALID_TOKEN_TOKEN.clone()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::Duration;
+
+    #[test]
+    fn test_build_mock_search_video() {
+        let video = build_mock_search_video();
+        assert_eq!(video.title, "title");
+        assert_eq!(video.duration, 14400);
+        assert_eq!(video.url, "youtube.com");
+    }
+
+    #[test]
+    fn test_build_mock_thumbnails() {
+        let thumbnails = build_mock_thumbnails();
+        assert_eq!(thumbnails.len(), 1);
+        assert_eq!(thumbnails[0].url, "thumbnail_url");
+    }
+
+    #[test]
+    fn test_build_mock_rusty_author() {
+        let author = build_mock_rusty_author();
+        assert_eq!(author.name, "name");
+        assert_eq!(author.channel_url, "channel_url");
+    }
+
+    #[test]
+    fn test_build_mock_rusty_video_details() {
+        let details = build_mock_rusty_video_details();
+        assert_eq!(details.title, "Title");
+        assert_eq!(details.video_url, "https://www.youtube.com/watch?v=meta123");
+        assert_eq!(details.length_seconds, "60");
+    }
+
+    #[test]
+    fn test_build_mock_metadata() {
+        let metadata = build_mock_metadata();
+        let aux = metadata.metadata();
+        
+        assert_eq!(aux.title, Some("title".to_string()));
+        assert_eq!(aux.artist, Some("name".to_string()));
+        assert_eq!(aux.duration, Some(Duration::from_millis(14400)));
+    }
 }

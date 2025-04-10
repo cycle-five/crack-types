@@ -214,3 +214,88 @@ pub fn search_result_to_aux_metadata(res: &SearchResult) -> AuxMetadata {
         SearchResult::Channel(_) => AuxMetadata::default(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::mocks::{build_mock_rusty_video_details, build_mock_search_video};
+
+    #[test]
+    fn test_from_video_details() {
+        let video_details = build_mock_rusty_video_details();
+        let metadata = NewAuxMetadata::from(&video_details);
+        
+        assert_eq!(metadata.0.title, Some("Title".to_string()));
+        assert_eq!(metadata.0.channel, Some("owner_channel_name".to_string()));
+        assert_eq!(metadata.0.duration, Some(Duration::from_secs(60)));
+        assert_eq!(metadata.0.source_url, Some("https://www.youtube.com/watch?v=meta123".to_string()));
+    }
+
+    #[test]
+    fn test_video_details_to_aux_metadata() {
+        let video_details = build_mock_rusty_video_details();
+        let metadata = video_details_to_aux_metadata(&video_details);
+        
+        assert_eq!(metadata.title, Some("Title".to_string()));
+        assert_eq!(metadata.date, Some("publish_date".to_string()));
+        assert_eq!(metadata.duration, Some(Duration::from_secs(60)));
+    }
+
+    #[test]
+    fn test_search_video_to_aux_metadata() {
+        let video = build_mock_search_video();
+        let metadata = search_video_to_aux_metadata(&video);
+        
+        assert_eq!(metadata.title, Some("title".to_string()));
+        assert_eq!(metadata.artist, Some("name".to_string()));
+        assert_eq!(metadata.channel, Some("name".to_string()));
+        assert_eq!(metadata.duration, Some(Duration::from_millis(14400)));
+        assert_eq!(metadata.source_url, Some("youtube.com".to_string()));
+    }
+
+    #[test]
+    fn test_from_search_result() {
+        let video = build_mock_search_video();
+        let search_result = SearchResult::Video(video);
+        let metadata = NewAuxMetadata::from(&search_result);
+        
+        assert_eq!(metadata.0.title, Some("title".to_string()));
+        assert_eq!(metadata.0.channel, Some("name".to_string()));
+        assert_eq!(metadata.0.duration, Some(Duration::from_millis(14400)));
+    }
+
+    #[test]
+    fn test_search_result_to_aux_metadata() {
+        let video = build_mock_search_video();
+        let search_result = SearchResult::Video(video);
+        let metadata = search_result_to_aux_metadata(&search_result);
+        
+        assert_eq!(metadata.title, Some("title".to_string()));
+        assert_eq!(metadata.artist, Some("name".to_string()));
+        assert_eq!(metadata.duration, Some(Duration::from_millis(14400)));
+    }
+
+    #[test]
+    fn test_with_source_url() {
+        let metadata = NewAuxMetadata::default().with_source_url("https://example.com".to_string());
+        assert_eq!(metadata.0.source_url, Some("https://example.com".to_string()));
+    }
+
+    #[test]
+    fn test_get_search_query() {
+        let metadata = AuxMetadata {
+            title: Some("Song Title".to_string()),
+            artist: Some("Artist Name".to_string()),
+            ..Default::default()
+        };
+        
+        let new_metadata = NewAuxMetadata::new(metadata);
+        assert_eq!(new_metadata.get_search_query(), "Artist Name - Song Title");
+    }
+
+    #[test]
+    fn test_get_search_query_missing_fields() {
+        let metadata = NewAuxMetadata::default();
+        assert_eq!(metadata.get_search_query(), " - ");
+    }
+}

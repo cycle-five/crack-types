@@ -1,13 +1,13 @@
-pub const ADDED_QUEUE: &str = "📃 Added to queue!";
-pub const AUTOPAUSE_OFF: &str = "🤖 Autopause OFF!";
-pub const AUTOPAUSE_ON: &str = "🤖 Autopause ON!";
-pub const AUTOPLAY_OFF: &str = "🤖 Autoplay OFF!";
-pub const AUTOPLAY_ON: &str = "🤖 Autoplay ON!";
-pub const CAM_VIOLATION_MSG: &str = "📷 You have been violated for being cammed down for too long.";
-pub const CLEARED: &str = "🗑️ Cleared!";
-pub const CLEANED: &str = "🗑️ Messages Cleaned: ";
-pub const CHANNEL_SIZE_SET: &str = "🗑️ Channel size set!";
-pub const CHANNEL_DELETED: &str = "🗑️ Deleted channel!";
+pub const ADDED_QUEUE: &str = "📃 Added to queue!";
+pub const AUTOPAUSE_OFF: &str = "🤖 Autopause OFF!";
+pub const AUTOPAUSE_ON: &str = "🤖 Autopause ON!";
+pub const AUTOPLAY_OFF: &str = "🤖 Autoplay OFF!";
+pub const AUTOPLAY_ON: &str = "🤖 Autoplay ON!";
+pub const CAM_VIOLATION_MSG: &str = "📷 You have been violated for being cammed down for too long.";
+pub const CLEARED: &str = "🗑️ Cleared!";
+pub const CLEANED: &str = "🗑️ Messages Cleaned: ";
+pub const CHANNEL_SIZE_SET: &str = "🗑️ Channel size set!";
+pub const CHANNEL_DELETED: &str = "🗑️ Deleted channel!";
 pub const COINFLIP: &str = "You flipped a coin and it landed on";
 #[macro_export]
 macro_rules! DICE_ROLL {
@@ -212,8 +212,39 @@ pub const VOTE_TOPGG_URL: &str = "https://top.gg/bot/1115229568006103122/vote";
 pub const VOTE_TOPGG_VOTED: &str = "Thank you for voting within the last 12 hours! Remember to vote again to get free premium features and support the bot.";
 pub const VOTE_TOPGG_NOT_VOTED: &str = "You haven't voted recently! Here is the link to vote :)";
 
-pub const INVITE_TEXT: &str = "🔗 ";
+pub const INVITE_TEXT: &str = "🔗 ";
 pub const INVITE_LINK_TEXT: &str = "Invite Crack Tunes to your server!";
 pub const INVITE_LINK_TEXT_SHORT: &str = "invite";
 pub const INVITE_URL: &str = "https://discord.com/oauth2/authorize?client_id=1115229568006103122&permissions=551940115520&scope=bot+applications.commands";
-pub const YTDL_FALLBACK: &str = "WARNING! Falling back to yt-dlp!";
+pub const YTDL_FALLBACK: &str = "WARNING! Falling back to yt-dlp!";
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_dice_roll_macro() {
+        let dice = [1, 2, 3, 4, 5];
+        let message = DICE_ROLL!(5, 6, dice);
+        assert_eq!(
+            message,
+            "You rolled 5 dice with 6 sides. Here are the results:\n1, 2, 3, 4, 5"
+        );
+    }
+
+    #[test]
+    fn test_emoji_prefixes() {
+        // Check that user-facing messages have emoji prefixes
+        assert!(ADDED_QUEUE.contains("📃"));
+        assert!(ERROR.contains("☹️"));
+        assert!(PAUSED.contains("⏸️"));
+        assert!(QUEUE_NOW_PLAYING.contains("🔊"));
+        assert!(STOPPED.contains("⏹️"));
+    }
+
+    #[test]
+    fn test_reference_equality() {
+        // Test for constants that should reference others
+        assert_eq!(UNKNOWN_LIT, UNKNOWN);
+    }
+}
